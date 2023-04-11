@@ -3,7 +3,7 @@ module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    '^.+\\.(ts|js|html)$': 'babel-jest',
   },
   testMatch: ['**/?(*.)+(jest).ts'],
   testEnvironment: 'jsdom',
