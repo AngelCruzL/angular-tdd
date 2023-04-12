@@ -13,15 +13,25 @@
 
   <div class='form-field'>
     <label for='password'>Password</label>
-    <input id='password' name='password' type='password' />
+    <input
+      (input)='onChangePassword($event)'
+      id='password'
+      name='password'
+      type='password'
+    />
   </div>
 
   <div class='form-field'>
     <label for='confirmPassword'>Confirm Password</label>
-    <input id='confirmPassword' name='confirmPassword' type='password' />
+    <input
+      (input)='onChangeConfirmPassword($event)'
+      id='confirmPassword'
+      name='confirmPassword'
+      type='password'
+    />
   </div>
 
   <div class='form-field'>
-    <button disabled type='submit'>Sign Up</button>
+    <button [disabled]='isDisabled()' type='submit'>Sign Up</button>
   </div>
 </form>

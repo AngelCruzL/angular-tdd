@@ -71,4 +71,29 @@ describe('SignUpComponent', () => {
       expect(button?.disabled).toBeTruthy();
     });
   });
+
+  describe('Interactions', function () {
+    it('should enable the sign up button if both password inputs have the same value', function () {
+      const signUp = fixture.nativeElement as HTMLElement;
+      const password = signUp.querySelector(
+        'input#password'
+      ) as HTMLInputElement;
+      const confirmPassword = signUp.querySelector(
+        'input#confirmPassword'
+      ) as HTMLInputElement;
+      const button = signUp.querySelector(
+        'button[type="submit"]'
+      ) as HTMLButtonElement;
+
+      password.value = 'P4ssword';
+      confirmPassword.value = 'P4ssword';
+
+      password.dispatchEvent(new Event('input'));
+      confirmPassword.dispatchEvent(new Event('input'));
+
+      fixture.detectChanges();
+
+      expect(button?.disabled).toBeFalsy();
+    });
+  });
 });
