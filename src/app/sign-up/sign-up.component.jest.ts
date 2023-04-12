@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 
 import { SignUpComponent } from './sign-up.component';
+import userEvent from '@testing-library/user-event';
 
 describe('SignUpComponent', () => {
   describe('Layout', () => {
@@ -46,6 +47,20 @@ describe('SignUpComponent', () => {
       await render(SignUpComponent);
       const button = screen.getByRole('button', { name: 'Sign Up' });
       expect(button).toBeDisabled();
+    });
+  });
+
+  describe('Interactions', function () {
+    it('should enable the sign up button if both password inputs have the same value', async () => {
+      await render(SignUpComponent);
+      const passwordInput = screen.getByLabelText('Password');
+      const confirmPasswordInput = screen.getByLabelText('Confirm Password');
+      const signUpButton = screen.getByRole('button', { name: 'Sign Up' });
+
+      await userEvent.type(passwordInput, 'P4ssword');
+      await userEvent.type(confirmPasswordInput, 'P4ssword');
+
+      expect(signUpButton).toBeEnabled();
     });
   });
 });
