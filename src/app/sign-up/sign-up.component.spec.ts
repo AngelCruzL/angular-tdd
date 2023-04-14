@@ -3,7 +3,6 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-
 import { SignUpComponent } from './sign-up.component';
 
 describe('SignUpComponent', () => {

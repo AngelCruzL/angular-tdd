@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-
 import { SignUpComponent } from './sign-up.component';
 
 let requestBody: any;
