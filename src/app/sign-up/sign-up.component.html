@@ -55,6 +55,11 @@
           class='btn btn-primary'
           type='submit'
         >
+          <span
+            *ngIf='isSendingHttpRequest'
+            aria-hidden='true'
+            class='spinner-grow spinner-grow-sm'
+            role='status'></span>
           Sign Up
         </button>
       </div>

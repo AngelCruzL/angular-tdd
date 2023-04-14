@@ -139,5 +139,14 @@ describe('SignUpComponent', () => {
       httpTestingController.expectOne('/api/1.0/users');
       expect(button?.disabled).toBeTruthy();
     });
+
+    it('should display a spinner after submit the form', function () {
+      setupForm();
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+
+      button.click();
+      fixture.detectChanges();
+      expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
+    });
   });
 });
