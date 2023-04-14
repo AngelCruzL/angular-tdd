@@ -121,5 +121,15 @@ describe('SignUpComponent', () => {
         expect(signUpButton).toBeDisabled();
       });
     });
+
+    test('should display a spinner after submit the form', async () => {
+      await setupForm();
+      expect(
+        screen.queryByRole('status', { hidden: true })
+      ).not.toBeInTheDocument();
+
+      await userEvent.click(signUpButton);
+      expect(screen.getByRole('status', { hidden: true })).toBeInTheDocument();
+    });
   });
 });
