@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
 import { SignUpComponent } from './sign-up.component';
 
@@ -9,6 +13,7 @@ describe('SignUpComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SignUpComponent],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SignUpComponent);
@@ -94,6 +99,47 @@ describe('SignUpComponent', () => {
       fixture.detectChanges();
 
       expect(button?.disabled).toBeFalsy();
+    });
+
+    it('should send the form data to backend', function () {
+      let httpTestingController = TestBed.inject(HttpTestingController);
+
+      const signUp = fixture.nativeElement as HTMLElement;
+      const username = signUp.querySelector(
+        'input#username'
+      ) as HTMLInputElement;
+      const email = signUp.querySelector('input#email') as HTMLInputElement;
+      const password = signUp.querySelector(
+        'input#password'
+      ) as HTMLInputElement;
+      const confirmPassword = signUp.querySelector(
+        'input#confirmPassword'
+      ) as HTMLInputElement;
+      const button = signUp.querySelector(
+        'button[type="submit"]'
+      ) as HTMLButtonElement;
+
+      username.value = 'user1';
+      email.value = 'test@mail.com';
+      password.value = 'P4ssword';
+      confirmPassword.value = 'P4ssword';
+
+      username.dispatchEvent(new Event('input'));
+      email.dispatchEvent(new Event('input'));
+      password.dispatchEvent(new Event('input'));
+      confirmPassword.dispatchEvent(new Event('input'));
+
+      fixture.detectChanges();
+      button.click();
+
+      const req = httpTestingController.expectOne('/api/1.0/users');
+      const { body, method } = req.request;
+      expect(method).toEqual('POST');
+      expect(body).toEqual({
+        username: 'user1',
+        email: 'test@mail.com',
+        password: 'P4ssword',
+      });
     });
   });
 });
