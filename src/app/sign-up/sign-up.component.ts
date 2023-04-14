@@ -11,6 +11,7 @@ export class SignUpComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  isSendingHttpRequest = false;
 
   #httpClient = inject(HttpClient);
 
@@ -31,13 +32,16 @@ export class SignUpComponent {
   }
 
   onSubmit(): void {
+    this.isSendingHttpRequest = true;
     this.#httpClient
       .post('/api/1.0/users', {
         username: this.username,
         email: this.email,
         password: this.password,
       })
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.isSendingHttpRequest = false;
+      });
   }
 
   isDisabled(): boolean {

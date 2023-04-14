@@ -50,7 +50,13 @@
       </div>
 
       <div class='text-center'>
-        <button [disabled]='isDisabled()' class='btn btn-primary' type='submit'>Sign Up</button>
+        <button
+          [disabled]='isDisabled() || isSendingHttpRequest'
+          class='btn btn-primary'
+          type='submit'
+        >
+          Sign Up
+        </button>
       </div>
     </form>
 
