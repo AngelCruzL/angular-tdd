@@ -1,16 +1,25 @@
 import { render, screen } from '@testing-library/angular';
+import { HttpClientModule } from '@angular/common/http';
 import userEvent from '@testing-library/user-event';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 
 import { SignUpComponent } from './sign-up.component';
-import { TestBed } from '@angular/core/testing';
+
+let requestBody: any;
+const server = setupServer(
+  rest.post('/api/1.0/users', (req, res, ctx) => {
+    requestBody = (req.json() as any).__zone_symbol__value;
+    return res(ctx.status(200), ctx.json({}));
+  })
+);
+
+beforeAll(() => server.listen());
+afterAll(() => server.close());
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientTestingModule],
+    imports: [HttpClientModule],
   });
 };
 
@@ -76,7 +85,6 @@ describe('SignUpComponent', () => {
 
     it('should send the form data to backend', async () => {
       await setup();
-      let httpTestingController = TestBed.inject(HttpTestingController);
 
       const usernameInput = screen.getByLabelText('Username');
       const emailInput = screen.getByLabelText('Email');
@@ -91,10 +99,7 @@ describe('SignUpComponent', () => {
 
       await userEvent.click(signUpButton);
 
-      const req = httpTestingController.expectOne('/api/1.0/users');
-      const { body, method } = req.request;
-      expect(method).toEqual('POST');
-      expect(body).toEqual({
+      expect(requestBody).toEqual({
         username: 'user1',
         email: 'test@mail.com',
         password: 'P4ssword',
