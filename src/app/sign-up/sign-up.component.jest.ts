@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { render, screen, waitFor } from '@testing-library/angular';
 import { HttpClientModule } from '@angular/common/http';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
@@ -6,12 +6,19 @@ import { setupServer } from 'msw/node';
 import { SignUpComponent } from './sign-up.component';
 
 let requestBody: any;
+let httpRequestCount = 0;
+
 const server = setupServer(
   rest.post('/api/1.0/users', (req, res, ctx) => {
     requestBody = (req.json() as any).__zone_symbol__value;
+    httpRequestCount += 1;
     return res(ctx.status(200), ctx.json({}));
   })
 );
+
+beforeEach(() => {
+  httpRequestCount = 0;
+});
 
 beforeAll(() => server.listen());
 afterAll(() => server.close());
@@ -70,38 +77,48 @@ describe('SignUpComponent', () => {
   });
 
   describe('Interactions', function () {
-    it('should enable the sign up button if both password inputs have the same value', async () => {
-      await setup();
-      const passwordInput = screen.getByLabelText('Password');
-      const confirmPasswordInput = screen.getByLabelText('Confirm Password');
-      const signUpButton = screen.getByRole('button', { name: 'Sign Up' });
+    let signUpButton: HTMLButtonElement;
 
-      await userEvent.type(passwordInput, 'P4ssword');
-      await userEvent.type(confirmPasswordInput, 'P4ssword');
-
-      expect(signUpButton).toBeEnabled();
-    });
-
-    it('should send the form data to backend', async () => {
+    const setupForm = async () => {
       await setup();
 
       const usernameInput = screen.getByLabelText('Username');
       const emailInput = screen.getByLabelText('Email');
       const passwordInput = screen.getByLabelText('Password');
       const confirmPasswordInput = screen.getByLabelText('Confirm Password');
-      const signUpButton = screen.getByRole('button', { name: 'Sign Up' });
+      signUpButton = screen.getByRole('button', { name: 'Sign Up' });
 
       await userEvent.type(usernameInput, 'user1');
       await userEvent.type(emailInput, 'test@mail.com');
       await userEvent.type(passwordInput, 'P4ssword');
       await userEvent.type(confirmPasswordInput, 'P4ssword');
+    };
 
+    it('should enable the sign up button if both password inputs have the same value', async () => {
+      await setupForm();
+      expect(signUpButton).toBeEnabled();
+    });
+
+    it('should send the form data to backend', async () => {
+      await setupForm();
       await userEvent.click(signUpButton);
 
       expect(requestBody).toEqual({
         username: 'user1',
         email: 'test@mail.com',
         password: 'P4ssword',
+      });
+    });
+
+    it('should disable the sign up button while is sending the request', async () => {
+      await setupForm();
+      await userEvent.click(signUpButton);
+      await userEvent.click(signUpButton);
+      await userEvent.click(signUpButton);
+
+      await waitFor(() => {
+        expect(httpRequestCount).toBe(1);
+        expect(signUpButton).toBeDisabled();
       });
     });
   });

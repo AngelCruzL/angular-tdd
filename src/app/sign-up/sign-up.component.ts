@@ -40,7 +40,7 @@ export class SignUpComponent {
         password: this.password,
       })
       .subscribe(() => {
-        this.isSendingHttpRequest = false;
+        // this.isSendingHttpRequest = false;
       });
   }
 
