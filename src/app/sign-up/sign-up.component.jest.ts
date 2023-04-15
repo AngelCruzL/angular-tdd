@@ -1,9 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { setupServer } from 'msw/node';
 
+import { setupServer } from 'msw/node';
 import { SignUpComponent } from './sign-up.component';
 import { SharedModule } from '../shared/shared.module';
 
@@ -27,7 +28,7 @@ afterAll(() => server.close());
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientModule, SharedModule],
+    imports: [HttpClientModule, SharedModule, FormsModule],
   });
 };
 

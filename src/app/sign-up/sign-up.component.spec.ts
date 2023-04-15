@@ -3,6 +3,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
 
 import { SignUpComponent } from './sign-up.component';
 import { SharedModule } from '../shared/shared.module';
@@ -14,7 +15,7 @@ describe('SignUpComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SignUpComponent],
-      imports: [HttpClientTestingModule, SharedModule],
+      imports: [HttpClientTestingModule, SharedModule, FormsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SignUpComponent);
@@ -83,9 +84,10 @@ describe('SignUpComponent', () => {
     let signUp: HTMLElement;
     let button: HTMLButtonElement;
 
-    const setupForm = () => {
+    const setupForm = async () => {
       httpTestingController = TestBed.inject(HttpTestingController);
 
+      await fixture.whenStable();
       signUp = fixture.nativeElement as HTMLElement;
       const username = signUp.querySelector(
         'input#username'
@@ -114,13 +116,13 @@ describe('SignUpComponent', () => {
       fixture.detectChanges();
     };
 
-    it('should enable the sign up button if both password inputs have the same value', function () {
-      setupForm();
+    it('should enable the sign up button if both password inputs have the same value', async () => {
+      await setupForm();
       expect(button?.disabled).toBeFalsy();
     });
 
-    it('should send the form data to backend', function () {
-      setupForm();
+    it('should send the form data to backend', async () => {
+      await setupForm();
       button.click();
 
       const req = httpTestingController.expectOne('/api/1.0/users');
@@ -133,8 +135,8 @@ describe('SignUpComponent', () => {
       });
     });
 
-    it('should disable the sign up button while is sending the request', function () {
-      setupForm();
+    it('should disable the sign up button while is sending the request', async () => {
+      await setupForm();
       button.click();
       fixture.detectChanges();
       button.click();
@@ -142,8 +144,8 @@ describe('SignUpComponent', () => {
       expect(button?.disabled).toBeTruthy();
     });
 
-    it('should display a spinner after submit the form', function () {
-      setupForm();
+    it('should display a spinner after submit the form', async () => {
+      await setupForm();
       expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
 
       button.click();
@@ -151,8 +153,8 @@ describe('SignUpComponent', () => {
       expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
     });
 
-    it('should display a notification after successful sign up', () => {
-      setupForm();
+    it('should display a notification after successful sign up', async () => {
+      await setupForm();
       expect(signUp.querySelector('div.alert-success')).toBeFalsy();
 
       button.click();
@@ -166,8 +168,8 @@ describe('SignUpComponent', () => {
       );
     });
 
-    it('should hide the sign up form after successful request', () => {
-      setupForm();
+    it('should hide the sign up form after successful request', async () => {
+      await setupForm();
       expect(
         signUp.querySelector('div[data-testId="signUpForm"]')
       ).toBeTruthy();

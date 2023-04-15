@@ -16,22 +16,6 @@ export class SignUpComponent {
 
   #userService = inject(UserService);
 
-  onChangeUsername(event: Event): void {
-    this.username = (event.target as HTMLInputElement).value;
-  }
-
-  onChangeEmail(event: Event): void {
-    this.email = (event.target as HTMLInputElement).value;
-  }
-
-  onChangePassword(event: Event): void {
-    this.password = (event.target as HTMLInputElement).value;
-  }
-
-  onChangeConfirmPassword(event: Event): void {
-    this.confirmPassword = (event.target as HTMLInputElement).value;
-  }
-
   onSubmit(): void {
     this.isSendingHttpRequest = true;
     this.#userService

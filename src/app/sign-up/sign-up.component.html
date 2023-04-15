@@ -11,7 +11,7 @@
       <div class='mb-3'>
         <label class='form-label' for='username'>Username</label>
         <input
-          (input)='onChangeUsername($event)'
+          [(ngModel)]='username'
           class='form-control'
           id='username'
           name='username'
@@ -22,7 +22,7 @@
       <div class='mb-3'>
         <label class='form-label' for='email'>Email</label>
         <input
-          (input)='onChangeEmail($event)'
+          [(ngModel)]='email'
           class='form-control'
           id='email'
           name='email'
@@ -33,7 +33,7 @@
       <div class='mb-3'>
         <label class='form-label' for='password'>Password</label>
         <input
-          (input)='onChangePassword($event)'
+          [(ngModel)]='password'
           class='form-control'
           id='password'
           name='password'
@@ -44,7 +44,7 @@
       <div class='mb-3'>
         <label class='form-label' for='confirmPassword'>Confirm Password</label>
         <input
-          (input)='onChangeConfirmPassword($event)'
+          [(ngModel)]='confirmPassword'
           class='form-control'
           id='confirmPassword'
           name='confirmPassword'
