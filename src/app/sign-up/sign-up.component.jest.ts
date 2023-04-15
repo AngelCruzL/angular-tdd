@@ -5,8 +5,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { SignUpComponent } from './sign-up.component';
-import { AlertComponent } from '../shared/alert/alert.component';
-import { ButtonComponent } from '../shared/button/button.component';
+import { SharedModule } from '../shared/shared.module';
 
 let requestBody: any;
 let httpRequestCount = 0;
@@ -28,8 +27,7 @@ afterAll(() => server.close());
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientModule],
-    declarations: [AlertComponent, ButtonComponent],
+    imports: [HttpClientModule, SharedModule],
   });
 };
 
