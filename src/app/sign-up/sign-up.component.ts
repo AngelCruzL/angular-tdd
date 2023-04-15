@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,7 +14,7 @@ export class SignUpComponent {
   isSendingHttpRequest = false;
   isSignUpSuccessful = false;
 
-  #httpClient = inject(HttpClient);
+  #userService = inject(UserService);
 
   onChangeUsername(event: Event): void {
     this.username = (event.target as HTMLInputElement).value;
@@ -34,14 +34,14 @@ export class SignUpComponent {
 
   onSubmit(): void {
     this.isSendingHttpRequest = true;
-    this.#httpClient
-      .post('/api/1.0/users', {
+    this.#userService
+      .signUp({
         username: this.username,
         email: this.email,
         password: this.password,
       })
       .subscribe(() => {
-        // this.isSendingHttpRequest = false;
+        this.isSendingHttpRequest = false;
         this.isSignUpSuccessful = true;
       });
   }
