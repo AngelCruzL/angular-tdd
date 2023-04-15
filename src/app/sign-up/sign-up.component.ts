@@ -12,6 +12,7 @@ export class SignUpComponent {
   password = '';
   confirmPassword = '';
   isSendingHttpRequest = false;
+  isSignUpSuccessful = false;
 
   #httpClient = inject(HttpClient);
 
@@ -41,6 +42,7 @@ export class SignUpComponent {
       })
       .subscribe(() => {
         // this.isSendingHttpRequest = false;
+        this.isSignUpSuccessful = true;
       });
   }
 

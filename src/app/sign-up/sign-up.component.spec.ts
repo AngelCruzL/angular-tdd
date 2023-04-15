@@ -148,5 +148,33 @@ describe('SignUpComponent', () => {
       fixture.detectChanges();
       expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
     });
+
+    it('should display a notification after successful sign up', () => {
+      setupForm();
+      expect(signUp.querySelector('div.alert-success')).toBeFalsy();
+
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+      req.flush({});
+      fixture.detectChanges();
+
+      const message = signUp.querySelector('div.alert-success');
+      expect(message?.textContent).toContain(
+        'Sign up successful, please check your inbox for activation email.'
+      );
+    });
+
+    it('should hide the sign up form after successful request', () => {
+      setupForm();
+      expect(
+        signUp.querySelector('div[data-testId="signUpForm"]')
+      ).toBeTruthy();
+
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+      req.flush({});
+      fixture.detectChanges();
+      expect(signUp.querySelector('div[data-testId="signUpForm"]')).toBeFalsy();
+    });
   });
 });

@@ -1,5 +1,8 @@
-<div class='col-lg-6 offset-lg-3 col-md-8 offset-md-2'>
-  <div class='card'>
+<div
+  *ngIf='!isSignUpSuccessful; else successMessage'
+  class='col-lg-6 offset-lg-3 col-md-8 offset-md-2'
+>
+  <div class='card' data-testId='signUpForm'>
     <header class='card-header text-center'>
       <h1>Sign Up</h1>
     </header>
@@ -58,13 +61,23 @@
           <span
             *ngIf='isSendingHttpRequest'
             aria-hidden='true'
-            class='spinner-grow spinner-grow-sm'
+            class='spinner-border spinner-border-sm'
             role='status'></span>
           Sign Up
         </button>
       </div>
     </form>
-
   </div>
-
 </div>
+
+<ng-template #successMessage>
+  <div class='mt-3 col-lg-6 offset-lg-3 col-md-8 offset-md-2'>
+    <div
+      *ngIf='isSignUpSuccessful'
+      class='alert alert-success text-center'
+      role='alert'
+    >
+      Sign up successful, please check your inbox for activation email.
+    </div>
+  </div>
+</ng-template>
