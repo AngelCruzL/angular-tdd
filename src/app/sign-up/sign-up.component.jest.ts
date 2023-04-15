@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 
@@ -28,7 +28,7 @@ afterAll(() => server.close());
 
 const setup = async () => {
   await render(SignUpComponent, {
-    imports: [HttpClientModule, SharedModule, FormsModule],
+    imports: [HttpClientModule, SharedModule, ReactiveFormsModule],
   });
 };
 
