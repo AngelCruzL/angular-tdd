@@ -1,0 +1,12 @@
+<button
+  [disabled]='isDisabled || isSendingHttpRequest'
+  class='btn btn-primary'
+  type='submit'
+>
+  <span
+    *ngIf='isSendingHttpRequest'
+    aria-hidden='true'
+    class='spinner-border spinner-border-sm'
+    role='status'></span>
+  <ng-content></ng-content>
+</button>
