@@ -131,5 +131,24 @@ describe('SignUpComponent', () => {
       await userEvent.click(signUpButton);
       expect(screen.getByRole('status', { hidden: true })).toBeInTheDocument();
     });
+
+    it('should display a notification after successful sign up', async () => {
+      await setupForm();
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+      await userEvent.click(signUpButton);
+      const alert = await screen.findByRole('alert');
+      expect(alert).toBeInTheDocument();
+    });
+
+    it('should hide the sign up form after successful request', async () => {
+      await setupForm();
+      const form = screen.getByTestId('signUpForm');
+      expect(form).toBeInTheDocument();
+
+      await userEvent.click(signUpButton);
+      await screen.findByRole('alert');
+      expect(form).not.toBeInTheDocument();
+    });
   });
 });
