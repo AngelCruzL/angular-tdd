@@ -36,6 +36,7 @@
       <div class='mb-3'>
         <label class='form-label' for='email'>Email</label>
         <input
+          [class.is-invalid]='emailError'
           class='form-control'
           formControlName='email'
           id='email'
@@ -54,6 +55,7 @@
       <div class='mb-3'>
         <label class='form-label' for='password'>Password</label>
         <input
+          [class.is-invalid]='passwordError'
           class='form-control'
           formControlName='password'
           id='password'

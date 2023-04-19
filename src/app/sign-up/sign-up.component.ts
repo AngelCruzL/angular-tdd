@@ -37,7 +37,7 @@ export class SignUpComponent implements OnInit {
     const field = this.signUpForm.get('email');
     if (field?.errors && (field?.touched || field?.dirty)) {
       if (field?.errors?.['required']) return 'Email is required';
-      else return 'Username must be at least 4 characters long';
+      else return 'Invalid email format, please use a valid email address';
     }
 
     return;
@@ -47,7 +47,8 @@ export class SignUpComponent implements OnInit {
     const field = this.signUpForm.get('password');
     if (field?.errors && (field?.touched || field?.dirty)) {
       if (field?.errors?.['required']) return 'Password is required';
-      else return 'Username must be at least 4 characters long';
+      else if (field?.errors?.['pattern'])
+        return 'Password must have at least 8 characters, one lowercase, one uppercase and one number';
     }
 
     return;
@@ -56,8 +57,14 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = this.#formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/),
+        ],
+      ],
       confirmPassword: [''],
     });
   }
