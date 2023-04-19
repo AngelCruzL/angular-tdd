@@ -16,6 +16,14 @@ const server = setupServer(
   rest.post('/api/1.0/users', async (req, res, ctx) => {
     requestBody = await req.json();
     httpRequestCount += 1;
+
+    if (requestBody.email === 'not-unique@mail.com') {
+      return res(
+        ctx.status(400),
+        ctx.json({ validationErrors: { email: 'Email already in use' } })
+      );
+    }
+
     return res(ctx.status(200), ctx.json({}));
   }),
   rest.post('/api/1.0/user/email', async (req, res, ctx) => {
@@ -30,6 +38,7 @@ const server = setupServer(
 
 beforeEach(() => {
   httpRequestCount = 0;
+  server.resetHandlers();
 });
 
 beforeAll(() => server.listen());
@@ -91,7 +100,7 @@ describe('SignUpComponent', () => {
   describe('Interactions', function () {
     let signUpButton: HTMLButtonElement;
 
-    const setupForm = async () => {
+    const setupForm = async (values?: { email: string }) => {
       await setup();
 
       const usernameInput = screen.getByLabelText('Username');
@@ -101,7 +110,7 @@ describe('SignUpComponent', () => {
       signUpButton = screen.getByRole('button', { name: 'Sign Up' });
 
       await userEvent.type(usernameInput, 'user1');
-      await userEvent.type(emailInput, 'test@mail.com');
+      await userEvent.type(emailInput, values?.email || 'test@mail.com');
       await userEvent.type(passwordInput, 'P4ssword');
       await userEvent.type(confirmPasswordInput, 'P4ssword');
     };
@@ -161,6 +170,13 @@ describe('SignUpComponent', () => {
       await userEvent.click(signUpButton);
       await screen.findByRole('alert');
       expect(form).not.toBeInTheDocument();
+    });
+
+    it('should display a backed validation error message after failure form submission', async () => {
+      await setupForm({ email: 'not-unique@mail.com' });
+      await userEvent.click(signUpButton);
+      const errorMessage = await screen.findByText('Email already in use');
+      expect(errorMessage).toBeInTheDocument();
     });
   });
 
