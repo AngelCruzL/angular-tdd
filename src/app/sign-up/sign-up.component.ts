@@ -33,11 +33,31 @@ export class SignUpComponent implements OnInit {
     return;
   }
 
+  get emailError(): string | void {
+    const field = this.signUpForm.get('email');
+    if (field?.errors && (field?.touched || field?.dirty)) {
+      if (field?.errors?.['required']) return 'Email is required';
+      else return 'Username must be at least 4 characters long';
+    }
+
+    return;
+  }
+
+  get passwordError(): string | void {
+    const field = this.signUpForm.get('password');
+    if (field?.errors && (field?.touched || field?.dirty)) {
+      if (field?.errors?.['required']) return 'Password is required';
+      else return 'Username must be at least 4 characters long';
+    }
+
+    return;
+  }
+
   ngOnInit(): void {
     this.signUpForm = this.#formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
-      email: [''],
-      password: [''],
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
       confirmPassword: [''],
     });
   }

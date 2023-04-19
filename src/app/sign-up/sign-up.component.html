@@ -41,6 +41,14 @@
           id='email'
           type='text'
         />
+
+        <div
+          *ngIf='emailError'
+          class='mt-1 mb-3 invalid-feedback d-block'
+          data-testId='emailValidationError'
+        >
+          {{emailError}}
+        </div>
       </div>
 
       <div class='mb-3'>
@@ -51,6 +59,14 @@
           id='password'
           type='password'
         />
+
+        <div
+          *ngIf='passwordError'
+          class='mt-1 mb-3 invalid-feedback d-block'
+          data-testId='passwordValidationError'
+        >
+          {{passwordError}}
+        </div>
       </div>
 
       <div class='mb-3'>
