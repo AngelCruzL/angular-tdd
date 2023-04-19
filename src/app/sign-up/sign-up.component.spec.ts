@@ -181,6 +181,30 @@ describe('SignUpComponent', () => {
       fixture.detectChanges();
       expect(signUp.querySelector('div[data-testId="signUpForm"]')).toBeFalsy();
     });
+
+    it('should display a backed validation error message after failure form submission', async () => {
+      await setupForm();
+
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+      req.flush(
+        {
+          validationErrors: {
+            email: 'Email already in use',
+          },
+        },
+        {
+          status: 400,
+          statusText: 'Bad Request',
+        }
+      );
+      fixture.detectChanges();
+
+      const errorMessage = signUp.querySelector(
+        'div[data-testId="emailValidationError"]'
+      )?.textContent;
+      expect(errorMessage).toContain('Email already in use');
+    });
   });
 
   describe('Validation', function () {
