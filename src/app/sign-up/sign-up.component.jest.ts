@@ -156,26 +156,21 @@ describe('SignUpComponent', () => {
   });
 
   describe('Validation', () => {
-    it('should display an error message if the username is null', async () => {
-      await setup();
-      const message = 'Username is required';
-      expect(screen.queryByText(message)).not.toBeInTheDocument();
+    test.each`
+      label         | inputValue              | errorMessage
+      ${'Username'} | ${'{space}{backspace}'} | ${'Username is required'}
+      ${'Username'} | ${'abc'}                | ${'Username must be at least 4 characters long'}
+    `(
+      'should display "$errorMessage" message when $label field has the value "$inputValue"',
+      async ({ label, inputValue, errorMessage }) => {
+        await setup();
+        expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 
-      const usernameInput = screen.getByLabelText('Username');
-      await userEvent.click(usernameInput);
-      await userEvent.tab();
-      expect(screen.queryByText(message)).toBeInTheDocument();
-    });
-
-    it('should display an error message when the username is less than 4 characters long', async () => {
-      await setup();
-      const message = 'Username must be at least 4 characters long';
-      expect(screen.queryByText(message)).not.toBeInTheDocument();
-
-      const usernameInput = screen.getByLabelText('Username');
-      await userEvent.type(usernameInput, 'abc');
-      await userEvent.tab();
-      expect(screen.queryByText(message)).toBeInTheDocument();
-    });
+        const input = screen.getByLabelText(label);
+        await userEvent.type(input, inputValue);
+        await userEvent.tab();
+        expect(screen.queryByText(errorMessage)).toBeInTheDocument();
+      }
+    );
   });
 });
