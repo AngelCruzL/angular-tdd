@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../core/services/user.service';
 import { passwordMatchValidator } from '../core/validators';
 import { SignUpFormBody } from '../core/types';
+import { UniqueEmailValidator } from '../core/validators/unique-email.validator';
 
 @Component({
   selector: 'app-sign-up',
@@ -17,6 +18,7 @@ export class SignUpComponent implements OnInit {
 
   #userService = inject(UserService);
   #formBuilder = inject(FormBuilder);
+  #uniqueEmailValidator = inject(UniqueEmailValidator);
 
   get usernameError(): string | void {
     const field = this.signUpForm.get('username');
@@ -32,7 +34,10 @@ export class SignUpComponent implements OnInit {
     const field = this.signUpForm.get('email');
     if (field?.errors && (field?.touched || field?.dirty)) {
       if (field?.errors?.['required']) return 'Email is required';
-      else return 'Invalid email format, please use a valid email address';
+      else if (field?.errors?.['email'])
+        return 'Invalid email format, please use a valid email address';
+      else if (field?.errors?.['uniqueEmail'])
+        return 'This email is already taken, please use a different email';
     }
 
     return;
@@ -65,7 +70,18 @@ export class SignUpComponent implements OnInit {
     this.signUpForm = this.#formBuilder.group(
       {
         username: ['', [Validators.required, Validators.minLength(4)]],
-        email: ['', [Validators.required, Validators.email]],
+        email: [
+          '',
+          {
+            validators: [Validators.required, Validators.email],
+            asyncValidators: [
+              this.#uniqueEmailValidator.validate.bind(
+                this.#uniqueEmailValidator
+              ),
+            ],
+            updateOn: 'blur',
+          },
+        ],
         password: [
           '',
           [
