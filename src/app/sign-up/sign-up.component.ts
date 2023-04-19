@@ -23,6 +23,16 @@ export class SignUpComponent implements OnInit {
   #userService = inject(UserService);
   #formBuilder = inject(FormBuilder);
 
+  get usernameError(): string | void {
+    const field = this.signUpForm.get('username');
+    if (field?.errors && (field?.touched || field?.dirty)) {
+      if (field?.errors?.['required']) return 'Username is required';
+      else return 'Username must be at least 4 characters long';
+    }
+
+    return;
+  }
+
   ngOnInit(): void {
     this.signUpForm = this.#formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
