@@ -7,15 +7,24 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { SignUpComponent } from './sign-up.component';
 import { SharedModule } from '../shared/shared.module';
+import { UniqueEmailCheck } from 'src/app/core/types';
 
 let requestBody: any;
 let httpRequestCount = 0;
 
 const server = setupServer(
-  rest.post('/api/1.0/users', (req, res, ctx) => {
-    requestBody = (req.json() as any).__zone_symbol__value;
+  rest.post('/api/1.0/users', async (req, res, ctx) => {
+    requestBody = await req.json();
     httpRequestCount += 1;
     return res(ctx.status(200), ctx.json({}));
+  }),
+  rest.post('/api/1.0/user/email', async (req, res, ctx) => {
+    const body = (await req.json()) as UniqueEmailCheck;
+    if (body.email === 'non-unique-email@mail.com') {
+      return res(ctx.status(200), ctx.json({}));
+    }
+
+    return res(ctx.status(400), ctx.json({}));
   })
 );
 
@@ -157,17 +166,18 @@ describe('SignUpComponent', () => {
 
   describe('Validation', () => {
     test.each`
-      label                 | inputValue              | errorMessage
-      ${'Username'}         | ${'{space}{backspace}'} | ${'Username is required'}
-      ${'Username'}         | ${'abc'}                | ${'Username must be at least 4 characters long'}
-      ${'Email'}            | ${'{space}{backspace}'} | ${'Email is required'}
-      ${'Email'}            | ${'wrong-format'}       | ${'Invalid email format, please use a valid email address'}
-      ${'Password'}         | ${'{space}{backspace}'} | ${'Password is required'}
-      ${'Password'}         | ${'password'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'}         | ${'PASSword'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'}         | ${'passw0rd'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'}         | ${'Pass123'}            | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Confirm Password'} | ${'pass'}               | ${'Password mismatch, please make sure the password and confirm password fields have the same value'}
+      label                 | inputValue                     | errorMessage
+      ${'Username'}         | ${'{space}{backspace}'}        | ${'Username is required'}
+      ${'Username'}         | ${'abc'}                       | ${'Username must be at least 4 characters long'}
+      ${'Email'}            | ${'{space}{backspace}'}        | ${'Email is required'}
+      ${'Email'}            | ${'wrong-format'}              | ${'Invalid email format, please use a valid email address'}
+      ${'Email'}            | ${'non-unique-email@mail.com'} | ${'This email is already taken, please use a different email'}
+      ${'Password'}         | ${'{space}{backspace}'}        | ${'Password is required'}
+      ${'Password'}         | ${'password'}                  | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'PASSword'}                  | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'passw0rd'}                  | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'Pass123'}                   | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Confirm Password'} | ${'pass'}                      | ${'Password mismatch, please make sure the password and confirm password fields have the same value'}
     `(
       'should display "$errorMessage" message when $label field has the value "$inputValue"',
       async ({ label, inputValue, errorMessage }) => {
@@ -177,7 +187,8 @@ describe('SignUpComponent', () => {
         const input = screen.getByLabelText(label);
         await userEvent.type(input, inputValue);
         await userEvent.tab();
-        expect(screen.queryByText(errorMessage)).toBeInTheDocument();
+        const errorMessageElement = await screen.findByText(errorMessage);
+        expect(errorMessageElement).toBeInTheDocument();
       }
     );
   });
