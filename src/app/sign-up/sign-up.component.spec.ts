@@ -183,46 +183,39 @@ describe('SignUpComponent', () => {
   });
 
   describe('Validation', function () {
-    it('should display an error message if the username is null', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
-      expect(
-        signUp.querySelector('div[data-testId="usernameValidationError"]')
-      ).toBeNull();
+    const testCases = [
+      {
+        field: 'username',
+        value: '',
+        error: 'Username is required',
+      },
+      {
+        field: 'username',
+        value: 'abc',
+        error: 'Username must be at least 4 characters long',
+      },
+    ];
 
-      const usernameInput = signUp.querySelector(
-        'input#username'
-      ) as HTMLInputElement;
-      usernameInput.dispatchEvent(new Event('focus'));
-      usernameInput.dispatchEvent(new Event('blur'));
-      fixture.detectChanges();
+    testCases.forEach(({ field, value, error }) => {
+      it(`should display "${error}" message when ${field} field has the value "${value}"`, () => {
+        const signUp = fixture.nativeElement as HTMLElement;
+        expect(
+          signUp.querySelector(`div[data-testId="${field}ValidationError"]`)
+        ).toBeNull();
 
-      const validationMessage = signUp.querySelector(
-        'div[data-testId="usernameValidationError"]'
-      )?.textContent;
-      expect(validationMessage).toContain('Username is required');
-    });
+        const input = signUp.querySelector(
+          `input#${field}`
+        ) as HTMLInputElement;
+        input.value = value;
+        input.dispatchEvent(new Event('input'));
+        input.dispatchEvent(new Event('blur'));
+        fixture.detectChanges();
 
-    it('should display an error message when the username is less than 4 characters long', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
-      expect(
-        signUp.querySelector('div[data-testId="usernameValidationError"]')
-      ).toBeNull();
-
-      const usernameInput = signUp.querySelector(
-        'input#username'
-      ) as HTMLInputElement;
-      usernameInput.value = 'abc';
-      usernameInput.dispatchEvent(new Event('input'));
-      usernameInput.dispatchEvent(new Event('blur'));
-      fixture.detectChanges();
-
-      const validationMessage = signUp.querySelector(
-        'div[data-testId="usernameValidationError"]'
-      )?.textContent;
-      console.log(validationMessage);
-      expect(validationMessage).toContain(
-        'Username must be at least 4 characters long'
-      );
+        const validationMessage = signUp.querySelector(
+          `div[data-testId="${field}ValidationError"]`
+        )?.textContent;
+        expect(validationMessage).toContain(error);
+      });
     });
   });
 });
