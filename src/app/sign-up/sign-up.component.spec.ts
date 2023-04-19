@@ -117,7 +117,7 @@ describe('SignUpComponent', () => {
       fixture.detectChanges();
     };
 
-    it('should enable the sign up button if both password inputs have the same value', async () => {
+    it('should enable the sign up button when all the fields have a valid input', async () => {
       await setupForm();
       expect(button?.disabled).toBeFalsy();
     });

@@ -122,9 +122,19 @@ export class SignUpComponent implements OnInit {
   }
 
   isDisabled(): boolean {
-    return this.signUpForm.get('password')?.value
-      ? this.signUpForm.get('password')?.value !==
-          this.signUpForm.get('confirmPassword')?.value
-      : true;
+    const formFilled =
+      this.signUpForm.get('username')?.value &&
+      this.signUpForm.get('email')?.value &&
+      this.signUpForm.get('password')?.value &&
+      this.signUpForm.get('confirmPassword')?.value;
+
+    const validationError =
+      this.usernameError ||
+      this.emailError ||
+      this.passwordError ||
+      this.confirmPasswordError;
+
+    // return !formFilled || validationError ? true : false;
+    return !!(!formFilled || validationError);
   }
 }

@@ -3,8 +3,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-
 import { setupServer } from 'msw/node';
+
 import { SignUpComponent } from './sign-up.component';
 import { SharedModule } from '../shared/shared.module';
 import { UniqueEmailCheck } from 'src/app/core/types';
@@ -115,7 +115,7 @@ describe('SignUpComponent', () => {
       await userEvent.type(confirmPasswordInput, 'P4ssword');
     };
 
-    it('should enable the sign up button if both password inputs have the same value', async () => {
+    it('should enable the sign up button when all the fields have a valid input', async () => {
       await setupForm();
       expect(signUpButton).toBeEnabled();
     });
