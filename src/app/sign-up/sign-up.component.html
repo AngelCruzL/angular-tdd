@@ -74,11 +74,20 @@
       <div class='mb-3'>
         <label class='form-label' for='confirmPassword'>Confirm Password</label>
         <input
+          [class.is-invalid]='confirmPasswordError'
           class='form-control'
           formControlName='confirmPassword'
           id='confirmPassword'
           type='password'
         />
+
+        <div
+          *ngIf='confirmPasswordError'
+          class='mt-1 mb-3 invalid-feedback d-block'
+          data-testId='confirmPasswordValidationError'
+        >
+          {{confirmPasswordError}}
+        </div>
       </div>
 
       <div class='text-center'>

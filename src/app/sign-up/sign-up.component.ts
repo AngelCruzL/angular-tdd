@@ -1,5 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 import { UserService } from '../core/services/user.service';
 
@@ -8,6 +15,19 @@ type SignUpFormBody = {
   email: string;
   password: string;
   confirmPassword: string;
+};
+
+const passwordMatchValidator: ValidatorFn = (
+  control: AbstractControl
+): ValidationErrors | null => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+
+  if (password?.value !== confirmPassword?.value) {
+    return { passwordMatch: true };
+  }
+
+  return null;
 };
 
 @Component({
@@ -54,19 +74,36 @@ export class SignUpComponent implements OnInit {
     return;
   }
 
+  get confirmPasswordError(): string | void {
+    if (
+      this.signUpForm?.errors &&
+      (this.signUpForm?.touched || this.signUpForm?.dirty)
+    ) {
+      if (this.signUpForm?.errors?.['passwordMatch'])
+        return 'Password mismatch, please make sure the password and confirm password fields have the same value';
+    }
+
+    return;
+  }
+
   ngOnInit(): void {
-    this.signUpForm = this.#formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(4)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/),
+    this.signUpForm = this.#formBuilder.group(
+      {
+        username: ['', [Validators.required, Validators.minLength(4)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+            ),
+          ],
         ],
-      ],
-      confirmPassword: [''],
-    });
+        confirmPassword: [''],
+      },
+      { validators: passwordMatchValidator }
+    );
   }
 
   onSubmit(): void {
