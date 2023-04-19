@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../core/services/user.service';
 
@@ -25,7 +25,7 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit(): void {
     this.signUpForm = this.#formBuilder.group({
-      username: [''],
+      username: ['', [Validators.required, Validators.minLength(4)]],
       email: [''],
       password: [''],
       confirmPassword: [''],

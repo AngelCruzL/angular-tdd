@@ -1,3 +1,5 @@
+{{signUpForm.get('username')?.errors |json}}
+
 <div
   *ngIf='!isSignUpSuccessful; else successMessage'
   class='col-lg-6 offset-lg-3 col-md-8 offset-md-2'
@@ -20,6 +22,20 @@
           id='username'
           type='text'
         />
+
+        <div
+          *ngIf='signUpForm.get("username")?.errors && signUpForm.get("username")?.touched || signUpForm.get("username")?.dirty'
+          class='bt-1 mb-3'
+          data-testId='usernameValidationError'
+        >
+          <div *ngIf='signUpForm.get("username")?.errors?.["required"]'>
+            Username is required
+          </div>
+
+          <div *ngIf='signUpForm.get("username")?.errors?.["minlength"]'>
+            Username must be at least 4 characters long
+          </div>
+        </div>
       </div>
 
       <div class='mb-3'>
