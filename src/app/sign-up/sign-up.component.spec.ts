@@ -202,7 +202,7 @@ describe('SignUpComponent', () => {
       expect(validationMessage).toContain('Username is required');
     });
 
-    it('should display an error message when the username is less than 4 characters', () => {
+    it('should display an error message when the username is less than 4 characters long', () => {
       const signUp = fixture.nativeElement as HTMLElement;
       expect(
         signUp.querySelector('div[data-testId="usernameValidationError"]')
