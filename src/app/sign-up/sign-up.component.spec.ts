@@ -110,6 +110,7 @@ describe('SignUpComponent', () => {
 
       username.dispatchEvent(new Event('input'));
       email.dispatchEvent(new Event('input'));
+      email.dispatchEvent(new Event('blur'));
       password.dispatchEvent(new Event('input'));
       confirmPassword.dispatchEvent(new Event('input'));
 
@@ -261,6 +262,40 @@ describe('SignUpComponent', () => {
         )?.textContent;
         expect(validationMessage).toContain(error);
       });
+    });
+
+    it('should display an error message when the provided email is already register', () => {
+      let httpTestingController = TestBed.inject(HttpTestingController);
+      const signUp = fixture.nativeElement as HTMLElement;
+      expect(
+        signUp.querySelector('div[data-testId="emailValidationError"]')
+      ).toBeNull();
+
+      const emailInput = signUp.querySelector(
+        'input#email'
+      ) as HTMLInputElement;
+      emailInput.value = 'non-unique-email@mail.com';
+      emailInput.dispatchEvent(new Event('input'));
+      emailInput.dispatchEvent(new Event('blur'));
+
+      const request = httpTestingController.expectOne(
+        ({ method, url, body }) => {
+          if (url === '/api/1.0/user/email' && method === 'POST') {
+            return body.email === 'non-unique-email@mail.com';
+          }
+
+          return false;
+        }
+      );
+      request.flush({});
+      fixture.detectChanges();
+
+      const validationMessage = signUp.querySelector(
+        'div[data-testId="emailValidationError"]'
+      )?.textContent;
+      const errorMessage =
+        'This email is already taken, please use a different email';
+      expect(validationMessage).toContain(errorMessage);
     });
   });
 });
