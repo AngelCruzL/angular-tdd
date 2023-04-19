@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { UserService } from '../core/services/user.service';
 import { passwordMatchValidator } from '../core/validators';
@@ -38,6 +39,8 @@ export class SignUpComponent implements OnInit {
         return 'Invalid email format, please use a valid email address';
       else if (field?.errors?.['uniqueEmail'])
         return 'This email is already taken, please use a different email';
+      else if (field?.errors?.['backendError'])
+        return field?.errors?.['backendError'];
     }
 
     return;
@@ -102,9 +105,19 @@ export class SignUpComponent implements OnInit {
       .value as SignUpFormBody;
 
     this.isSendingHttpRequest = true;
-    this.#userService.signUp({ username, email, password }).subscribe(() => {
-      this.isSendingHttpRequest = false;
-      this.isSignUpSuccessful = true;
+    this.#userService.signUp({ username, email, password }).subscribe({
+      next: () => {
+        this.isSendingHttpRequest = false;
+        this.isSignUpSuccessful = true;
+      },
+      error: (httpError: HttpErrorResponse) => {
+        this.isSendingHttpRequest = false;
+        const emailValidationErrorMsg =
+          httpError.error?.validationErrors?.email;
+        this.signUpForm
+          .get('email')
+          ?.setErrors({ backendError: emailValidationErrorMsg });
+      },
     });
   }
 
