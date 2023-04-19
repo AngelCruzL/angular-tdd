@@ -194,6 +194,16 @@ describe('SignUpComponent', () => {
         value: 'abc',
         error: 'Username must be at least 4 characters long',
       },
+      {
+        field: 'email',
+        value: '',
+        error: 'Email is required',
+      },
+      {
+        field: 'password',
+        value: '',
+        error: 'Password is required',
+      },
     ];
 
     testCases.forEach(({ field, value, error }) => {

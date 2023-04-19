@@ -160,6 +160,8 @@ describe('SignUpComponent', () => {
       label         | inputValue              | errorMessage
       ${'Username'} | ${'{space}{backspace}'} | ${'Username is required'}
       ${'Username'} | ${'abc'}                | ${'Username must be at least 4 characters long'}
+      ${'Email'}    | ${'{space}{backspace}'} | ${'Email is required'}
+      ${'Password'} | ${'{space}{backspace}'} | ${'Password is required'}
     `(
       'should display "$errorMessage" message when $label field has the value "$inputValue"',
       async ({ label, inputValue, errorMessage }) => {
