@@ -233,6 +233,12 @@ describe('SignUpComponent', () => {
         error:
           'Password must have at least 8 characters, one lowercase, one uppercase and one number',
       },
+      {
+        field: 'confirmPassword',
+        value: 'pass',
+        error:
+          'Password mismatch, please make sure the password and confirm password fields have the same value',
+      },
     ];
 
     testCases.forEach(({ field, value, error }) => {

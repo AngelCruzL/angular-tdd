@@ -157,16 +157,17 @@ describe('SignUpComponent', () => {
 
   describe('Validation', () => {
     test.each`
-      label         | inputValue              | errorMessage
-      ${'Username'} | ${'{space}{backspace}'} | ${'Username is required'}
-      ${'Username'} | ${'abc'}                | ${'Username must be at least 4 characters long'}
-      ${'Email'}    | ${'{space}{backspace}'} | ${'Email is required'}
-      ${'Email'}    | ${'wrong-format'}       | ${'Invalid email format, please use a valid email address'}
-      ${'Password'} | ${'{space}{backspace}'} | ${'Password is required'}
-      ${'Password'} | ${'password'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'} | ${'PASSword'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'} | ${'passw0rd'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
-      ${'Password'} | ${'Pass123'}            | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      label                 | inputValue              | errorMessage
+      ${'Username'}         | ${'{space}{backspace}'} | ${'Username is required'}
+      ${'Username'}         | ${'abc'}                | ${'Username must be at least 4 characters long'}
+      ${'Email'}            | ${'{space}{backspace}'} | ${'Email is required'}
+      ${'Email'}            | ${'wrong-format'}       | ${'Invalid email format, please use a valid email address'}
+      ${'Password'}         | ${'{space}{backspace}'} | ${'Password is required'}
+      ${'Password'}         | ${'password'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'PASSword'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'passw0rd'}           | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Password'}         | ${'Pass123'}            | ${'Password must have at least 8 characters, one lowercase, one uppercase and one number'}
+      ${'Confirm Password'} | ${'pass'}               | ${'Password mismatch, please make sure the password and confirm password fields have the same value'}
     `(
       'should display "$errorMessage" message when $label field has the value "$inputValue"',
       async ({ label, inputValue, errorMessage }) => {
