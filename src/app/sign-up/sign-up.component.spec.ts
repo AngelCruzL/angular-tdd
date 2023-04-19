@@ -200,9 +200,38 @@ describe('SignUpComponent', () => {
         error: 'Email is required',
       },
       {
+        field: 'email',
+        value: 'wrong-format',
+        error: 'Invalid email format, please use a valid email address',
+      },
+      {
         field: 'password',
         value: '',
         error: 'Password is required',
+      },
+      {
+        field: 'password',
+        value: 'password',
+        error:
+          'Password must have at least 8 characters, one lowercase, one uppercase and one number',
+      },
+      {
+        field: 'password',
+        value: 'PASSword',
+        error:
+          'Password must have at least 8 characters, one lowercase, one uppercase and one number',
+      },
+      {
+        field: 'password',
+        value: 'passw0rd',
+        error:
+          'Password must have at least 8 characters, one lowercase, one uppercase and one number',
+      },
+      {
+        field: 'password',
+        value: 'Pass123',
+        error:
+          'Password must have at least 8 characters, one lowercase, one uppercase and one number',
       },
     ];
 
