@@ -1,34 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserService } from '../core/services/user.service';
-
-type SignUpFormBody = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-const passwordMatchValidator: ValidatorFn = (
-  control: AbstractControl
-): ValidationErrors | null => {
-  const password = control.get('password');
-  const confirmPassword = control.get('confirmPassword');
-
-  if (password?.value !== confirmPassword?.value) {
-    return { passwordMatch: true };
-  }
-
-  return null;
-};
+import { passwordMatchValidator } from '../core/validators';
+import { SignUpFormBody } from '../core/types';
 
 @Component({
   selector: 'app-sign-up',
