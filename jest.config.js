@@ -5,4 +5,9 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testMatch: ['**/?(*.)+(jest).ts'],
   testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    '^@shared/(.*)': '<rootDir>/src/app/shared/$1',
+    '^@core/(.*)': '<rootDir>/src/app/core/$1',
+    '^@modules/(.*)': '<rootDir>/src/app/modules/$1',
+  },
 };
