@@ -34,10 +34,6 @@ describe('AppComponent', () => {
     const testCases = [
       { route: '/', component: 'dashboard', id: 'dashboardPage' },
       { route: '/auth', component: 'auth', id: 'authPage' },
-      // { route: '/auth/signup', component: 'sign-up', id: 'signUpForm' },
-      // { route: '/auth/login', component: 'login', id: 'loginForm' },
-      // { route: '/user/1', component: 'user-detail', id: 'userDetailPage' },
-      // { route: '/user/13', component: 'user-detail', id: 'userDetailPage' },
     ];
 
     testCases.forEach(({ route, component, id }) => {

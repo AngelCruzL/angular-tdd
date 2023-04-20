@@ -1,11 +1,11 @@
 import { render } from '@testing-library/angular';
 
-import { AppComponent } from './app.component';
-import { appRoutes } from './app-routing.module';
+import { DashboardComponent } from './dashboard.component';
+import { dashboardRoutes } from './dashboard-routing.module';
 
 const setup = async (route: string) => {
-  const { navigate } = await render(AppComponent, {
-    routes: appRoutes,
+  const { navigate } = await render(DashboardComponent, {
+    routes: dashboardRoutes,
   });
 
   await navigate(route);
@@ -13,9 +13,10 @@ const setup = async (route: string) => {
 
 describe('Routing', function () {
   it.each`
-    route      | component      | id
-    ${'/auth'} | ${'auth'}      | ${'authPage'}
-    ${'/'}     | ${'dashboard'} | ${'dashboardPage'}
+    route         | component        | id
+    ${'/'}        | ${'home'}        | ${'homePage'}
+    ${'/user/1'}  | ${'user-detail'} | ${'userDetailPage'}
+    ${'/user/13'} | ${'user-detail'} | ${'userDetailPage'}
   `(
     'should display the $component component on "$route" route',
     async ({ route, id }) => {

@@ -21,6 +21,7 @@ export const authRoutes: Routes = [
       {
         path: '**',
         redirectTo: 'login',
+        pathMatch: 'full',
       },
     ],
   },
