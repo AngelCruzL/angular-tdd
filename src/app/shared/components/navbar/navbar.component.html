@@ -1,0 +1,15 @@
+<nav class='navbar navbar-expand navbar-light bg-light shadow-sm'>
+  <div class='container'>
+    <a class='navbar-brand' routerLink='/' title='Home'>
+      Ángel Cruz
+    </a>
+
+    <ul class='navbar-nav'>
+      <li *ngFor='let link of navbarLinks' class='list-unstyled'>
+        <a [routerLink]='link.path' [title]='link.label' class='nav-link'>
+          {{link.label}}
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
