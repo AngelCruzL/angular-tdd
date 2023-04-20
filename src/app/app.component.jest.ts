@@ -21,9 +21,12 @@ const setup = async (route: string) => {
 
 describe('Routing', function () {
   it.each`
-    route        | component    | id
-    ${'/'}       | ${'home'}    | ${'homePage'}
-    ${'/signup'} | ${'sign-up'} | ${'signUpForm'}
+    route         | component        | id
+    ${'/'}        | ${'home'}        | ${'homePage'}
+    ${'/signup'}  | ${'sign-up'}     | ${'signUpForm'}
+    ${'/login'}   | ${'login'}       | ${'loginForm'}
+    ${'/user/1'}  | ${'user-detail'} | ${'userDetailPage'}
+    ${'/user/13'} | ${'user-detail'} | ${'userDetailPage'}
   `(
     'should display the $component component on "$route" route',
     async ({ route, id }) => {

@@ -34,6 +34,9 @@ describe('AppComponent', () => {
     const testCases = [
       { route: '/', component: 'home', id: 'homePage' },
       { route: '/signup', component: 'sign-up', id: 'signUpForm' },
+      { route: '/login', component: 'login', id: 'loginForm' },
+      { route: '/user/1', component: 'user-detail', id: 'userDetailPage' },
+      { route: '/user/13', component: 'user-detail', id: 'userDetailPage' },
     ];
 
     testCases.forEach(({ route, component, id }) => {
