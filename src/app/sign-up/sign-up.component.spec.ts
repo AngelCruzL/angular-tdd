@@ -205,6 +205,27 @@ describe('SignUpComponent', () => {
       )?.textContent;
       expect(errorMessage).toContain('Email already in use');
     });
+
+    it('should hide the spinner after sign up failure request', async () => {
+      await setupForm();
+
+      button.click();
+      const req = httpTestingController.expectOne('/api/1.0/users');
+      req.flush(
+        {
+          validationErrors: {
+            email: 'Email already in use',
+          },
+        },
+        {
+          status: 400,
+          statusText: 'Bad Request',
+        }
+      );
+      fixture.detectChanges();
+
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+    });
   });
 
   describe('Validation', function () {
