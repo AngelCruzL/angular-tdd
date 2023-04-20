@@ -5,8 +5,8 @@ import {
 } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { SignUpComponent } from './sign-up.component';
-import { SharedModule } from '../shared/shared.module';
+import { SignUpComponent } from 'src/app/modules/auth/pages/sign-up/sign-up.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;

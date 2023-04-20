@@ -6,8 +6,8 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { SignUpComponent } from './sign-up.component';
-import { SharedModule } from '../shared/shared.module';
-import { UniqueEmailCheck } from 'src/app/core/types';
+import { SharedModule } from '@shared/shared.module';
+import { UniqueEmailCheck } from '../../types';
 
 let requestBody: any;
 let httpRequestCount = 0;

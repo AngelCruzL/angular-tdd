@@ -2,10 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { UserService } from '../core/services/user.service';
-import { passwordMatchValidator } from '../core/validators';
-import { SignUpFormBody } from '../core/types';
-import { UniqueEmailValidator } from '../core/validators/unique-email.validator';
+import { UserService } from '../../../../core/services/user.service';
+import { passwordMatchValidator } from '../../../auth/validators';
+import { SignUpFormBody } from 'src/app/modules/auth/types';
+import { UniqueEmailValidator } from '../../validators/unique-email.validator';
 
 @Component({
   selector: 'app-sign-up',
