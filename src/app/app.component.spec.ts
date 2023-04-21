@@ -1,16 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { appRoutes } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { AppModule } from 'src/app/app.module';
+import { AppModule } from './app.module';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let router: Router;
+  let appComponent: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,6 +34,7 @@ describe('AppComponent', () => {
     router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    appComponent = fixture.nativeElement;
   });
 
   describe('Routing', () => {
@@ -41,11 +48,43 @@ describe('AppComponent', () => {
         await router.navigate([route]);
         fixture.detectChanges();
 
-        const page = fixture.nativeElement.querySelector(
-          `div[data-testId="${id}"]`
-        );
+        const page = appComponent.querySelector(`div[data-testId="${id}"]`);
         expect(page).toBeTruthy();
       });
+    });
+  });
+
+  describe('Navbar Routing', function () {
+    const navigationTests = [
+      {
+        initialPath: '/',
+        clickingTo: 'Home',
+        id: 'homePage',
+      },
+      {
+        initialPath: '/auth/signup',
+        clickingTo: 'Sign Up',
+        id: 'signUpForm',
+      },
+      {
+        initialPath: '/auth/login',
+        clickingTo: 'Login',
+        id: 'loginForm',
+      },
+    ];
+
+    navigationTests.forEach(({ initialPath, clickingTo, id }) => {
+      it(`should display ${clickingTo} page after clicking "${clickingTo}" link`, fakeAsync(async () => {
+        await router.navigate([initialPath]);
+        const linkElement = appComponent.querySelector(
+          `a[title="${clickingTo}"]`
+        ) as HTMLAnchorElement;
+        linkElement.click();
+        tick();
+        fixture.detectChanges();
+        const page = appComponent.querySelector(`div[data-testId="${id}"]`);
+        expect(page).toBeTruthy();
+      }));
     });
   });
 });
