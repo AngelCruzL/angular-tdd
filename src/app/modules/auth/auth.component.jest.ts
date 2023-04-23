@@ -8,6 +8,8 @@ import { authRoutes } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 
 const setup = async (route: string) => {
   const { navigate } = await render(AuthComponent, {
@@ -18,6 +20,23 @@ const setup = async (route: string) => {
 
   await navigate(route);
 };
+
+const server = setupServer(
+  rest.post('/api/1.0/users/token/:token', (req, res, ctx) => {
+    if (req.params['token'] === '456')
+      return res(ctx.status(400), ctx.json({}));
+
+    return res(ctx.status(200));
+  })
+);
+
+beforeEach(() => {
+  server.resetHandlers();
+});
+
+beforeAll(() => server.listen());
+
+afterAll(() => server.close());
 
 describe('Routing', function () {
   it.each`
