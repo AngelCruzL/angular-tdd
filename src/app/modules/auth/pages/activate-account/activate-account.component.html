@@ -1,3 +1,9 @@
 <div data-testId='activateAccountPage'>
-  <h1>Activate Account Page</h1>
+  <app-alert *ngIf='activationStatus==="success"'>
+    Account activated successfully
+  </app-alert>
+
+  <app-alert *ngIf='activationStatus==="fail"'>
+    Account activation failed
+  </app-alert>
 </div>

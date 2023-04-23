@@ -1,2 +1,3 @@
-export * from 'src/app/modules/auth/types/signup-form-body';
-export * from 'src/app/modules/auth/types/unique-email-check';
+export * from './signup-form-body';
+export * from './unique-email-check';
+export * from './route-params';
