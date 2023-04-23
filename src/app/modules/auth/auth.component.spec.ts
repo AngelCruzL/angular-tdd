@@ -28,6 +28,16 @@ describe('AuthComponent', () => {
       { route: '/', component: 'login', id: 'loginForm' },
       { route: '/login', component: 'login', id: 'loginForm' },
       { route: '/signup', component: 'sign-up', id: 'signUpForm' },
+      {
+        route: '/activate/13',
+        component: 'activate-account',
+        id: 'activateAccountPage',
+      },
+      {
+        route: '/activate/123',
+        component: 'activate-account',
+        id: 'activateAccountPage',
+      },
     ];
 
     testCases.forEach(({ route, component, id }) => {

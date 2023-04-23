@@ -9,9 +9,10 @@ import { SharedModule } from '@shared/shared.module';
 import { AuthComponent } from './auth.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { LoginComponent } from './pages/login/login.component';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 
 @NgModule({
-  declarations: [AuthComponent, SignUpComponent, LoginComponent],
+  declarations: [AuthComponent, SignUpComponent, LoginComponent, ActivateAccountComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

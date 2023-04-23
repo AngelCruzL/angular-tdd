@@ -21,10 +21,12 @@ const setup = async (route: string) => {
 
 describe('Routing', function () {
   it.each`
-    route        | component    | id
-    ${'/'}       | ${'login'}   | ${'loginForm'}
-    ${'/login'}  | ${'login'}   | ${'loginForm'}
-    ${'/signup'} | ${'sign-up'} | ${'signUpForm'}
+    route              | component             | id
+    ${'/'}             | ${'login'}            | ${'loginForm'}
+    ${'/login'}        | ${'login'}            | ${'loginForm'}
+    ${'/signup'}       | ${'sign-up'}          | ${'signUpForm'}
+    ${'/activate/123'} | ${'activate-account'} | ${'activateAccountPage'}
+    ${'/activate/13'}  | ${'activate-account'} | ${'activateAccountPage'}
   `(
     'should display the $component component on "$route" route',
     async ({ route, id }) => {
