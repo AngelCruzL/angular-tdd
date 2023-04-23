@@ -8,7 +8,6 @@ import { rest } from 'msw';
 import { RouteParams } from '@modules/auth/types';
 import { ActivateAccountComponent } from './activate-account.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
-import { CommonModule } from '@angular/common';
 
 let subscriber!: Subscriber<RouteParams>;
 
@@ -19,7 +18,7 @@ const setup = async () => {
 
   await render(ActivateAccountComponent, {
     declarations: [AlertComponent],
-    imports: [HttpClientModule, CommonModule],
+    imports: [HttpClientModule],
     providers: [
       {
         provide: ActivatedRoute,

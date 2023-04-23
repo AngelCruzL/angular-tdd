@@ -1,6 +1,8 @@
 import { render } from '@testing-library/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 
 import { SharedModule } from '@shared/shared.module';
 import { authRoutes } from './auth-routing.module';
@@ -8,12 +10,11 @@ import { authRoutes } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
-import { setupServer } from 'msw/node';
-import { rest } from 'msw';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
 
 const setup = async (route: string) => {
   const { navigate } = await render(AuthComponent, {
-    declarations: [LoginComponent, SignUpComponent],
+    declarations: [LoginComponent, SignUpComponent, ActivateAccountComponent],
     imports: [HttpClientModule, SharedModule, ReactiveFormsModule],
     routes: authRoutes,
   });
