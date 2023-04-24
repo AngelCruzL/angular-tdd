@@ -8,16 +8,19 @@ import { UserService } from '@core/services/user.service';
   styleUrls: ['./activate-account.component.css'],
 })
 export class ActivateAccountComponent implements OnInit {
-  activationStatus!: 'success' | 'fail';
+  activationStatus!: 'success' | 'fail' | 'inProgress';
+
   #route = inject(ActivatedRoute);
   #userService = inject(UserService);
 
   ngOnInit(): void {
-    this.#route.params.subscribe(params =>
+    this.#route.params.subscribe(params => {
+      this.activationStatus = 'inProgress';
+
       this.#userService.activate(params['id']).subscribe({
         next: () => (this.activationStatus = 'success'),
         error: () => (this.activationStatus = 'fail'),
-      })
-    );
+      });
+    });
   }
 }
