@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import userEvent from '@testing-library/user-event';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 
 import { appRoutes } from './app-routing.module';
 
@@ -16,6 +18,32 @@ const setup = async (route: string) => {
 
   await navigate(route);
 };
+
+const server = setupServer(
+  rest.get('/api/1.0/users', (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        content: [
+          {
+            id: 1,
+            username: 'user1',
+            email: 'user1@mail.com',
+          },
+        ],
+        page: 0,
+        size: 3,
+        totalPages: 1,
+      })
+    );
+  })
+);
+
+beforeEach(() => server.resetHandlers());
+
+beforeAll(() => server.listen());
+
+afterAll(() => server.close());
 
 describe('Routing', function () {
   it.each`
