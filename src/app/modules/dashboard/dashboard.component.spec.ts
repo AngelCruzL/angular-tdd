@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
 import { dashboardRoutes } from './dashboard-routing.module';
@@ -13,7 +14,10 @@ describe('DashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes(dashboardRoutes)],
+      imports: [
+        RouterTestingModule.withRoutes(dashboardRoutes),
+        HttpClientTestingModule,
+      ],
       declarations: [DashboardComponent],
     }).compileComponents();
 
