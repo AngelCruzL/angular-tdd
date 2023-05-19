@@ -11,6 +11,7 @@ import { appRoutes } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -20,7 +21,11 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppModule, RouterTestingModule.withRoutes(appRoutes)],
+      imports: [
+        AppModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes(appRoutes),
+      ],
       // declarations: [AppComponent, SignUpComponent, HomeComponent],
       // imports: [
       //   RouterTestingModule.withRoutes(routes),
