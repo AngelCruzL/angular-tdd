@@ -37,7 +37,7 @@ const server = setupServer(
     counter++;
 
     if (req.params['token'] === '456')
-      return res(ctx.status(400), ctx.json({}));
+      return res(ctx.status(400), ctx.json({}), ctx.delay(50));
 
     return res(ctx.status(200));
   })
@@ -85,8 +85,7 @@ describe('ActivateAccountComponent', () => {
     await setup();
     subscriber.next({ id: '456' });
 
-    // TODO: Fix the spinner test
-    // await screen.findByRole('status');
+    await screen.findByRole('status');
 
     const msg = await screen.findByText('Account activation failed');
     expect(msg).toBeInTheDocument();
