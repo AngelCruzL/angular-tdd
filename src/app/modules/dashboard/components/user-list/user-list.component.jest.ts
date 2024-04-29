@@ -1,35 +1,18 @@
 import { setupServer } from 'msw/node';
+import { HttpClientModule } from '@angular/common/http';
 import { rest } from 'msw';
 import { render, screen, waitFor } from '@testing-library/angular';
-import { UserListComponent } from '@modules/dashboard/components/user-list/user-list.component';
-import { HttpClientModule } from '@angular/common/http';
 
-const page = {
-  content: [
-    {
-      id: 1,
-      username: 'user1',
-      email: 'user1@mail.com',
-    },
-    {
-      id: 2,
-      username: 'user2',
-      email: 'user2@mail.com',
-    },
-    {
-      id: 3,
-      username: 'user3',
-      email: 'user3@mail.com',
-    },
-  ],
-  page: 0,
-  size: 3,
-  totalPages: 5,
-};
+import { UserListComponent } from './user-list.component';
+import { getPage, PageParam } from './user-list.component.spec';
 
 const server = setupServer(
   rest.get('/api/1.0/users', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(page));
+    let size: PageParam = req.url.searchParams.get('size');
+    let page: PageParam = req.url.searchParams.get('page');
+    size = Number.isNaN(+size!) ? 5 : +size!;
+    page = Number.isNaN(+page!) ? 0 : +page!;
+    return res(ctx.status(200), ctx.json(getPage(page, size)));
   })
 );
 
