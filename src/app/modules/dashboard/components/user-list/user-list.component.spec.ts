@@ -95,7 +95,65 @@ describe('UserListComponent', () => {
   });
 
   it('should send the size param as 3', () => {
-    const request = httpTestingController.expectOne('/api/1.0/users?size=3');
+    const request = httpTestingController.expectOne(
+      req =>
+        req.url.startsWith('/api/1.0/users') && req.params.get('size') === '3'
+    );
     expect(request.request.params.get('size')).toBe('3');
+  });
+
+  it('should display the "next page" button', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(0, 3));
+    fixture.detectChanges();
+    const nextPageButton = fixture.nativeElement.querySelector('.next-page');
+    expect(nextPageButton).toBeTruthy();
+  });
+
+  it('should request the next page after click next page button', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(0, 3));
+    fixture.detectChanges();
+    const nextPageButton = fixture.nativeElement.querySelector('.next-page');
+    nextPageButton.click();
+    const nextPageRequest = httpTestingController.expectOne(() => true);
+    expect(nextPageRequest.request.params.get('page')).toBe('1');
+  });
+
+  it('should not display the "next page" button at last page', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(2, 3));
+    fixture.detectChanges();
+    const nextPageButton = fixture.nativeElement.querySelector('.next-page');
+    expect(nextPageButton).toBeFalsy();
+  });
+
+  it('should not display the "previous page" button at first page', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(0, 3));
+    fixture.detectChanges();
+    const previousPageButton =
+      fixture.nativeElement.querySelector('.previous-page');
+    expect(previousPageButton).toBeFalsy();
+  });
+
+  it('should display the "previous page" button', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(1, 3));
+    fixture.detectChanges();
+    const previousPageButton =
+      fixture.nativeElement.querySelector('.previous-page');
+    expect(previousPageButton).toBeTruthy();
+  });
+
+  it('should request the previous page after click previous page button', () => {
+    const request = httpTestingController.expectOne(() => true);
+    request.flush(getPage(1, 3));
+    fixture.detectChanges();
+    const previousPageButton =
+      fixture.nativeElement.querySelector('.previous-page');
+    previousPageButton.click();
+    const previousPageRequest = httpTestingController.expectOne(() => true);
+    expect(previousPageRequest.request.params.get('page')).toBe('0');
   });
 });

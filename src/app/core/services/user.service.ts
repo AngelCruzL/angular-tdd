@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserPage } from '@core/types/user';
+import { Observable } from 'rxjs';
 
 type SignUpFormBody = {
   email: string;
@@ -25,9 +27,9 @@ export class UserService {
     return this.httpClient.post(`/api/1.0/users/token/${token}`, {});
   }
 
-  loadUsers() {
-    return this.httpClient.get('/api/1.0/users', {
-      params: { size: '3' },
+  loadUsers(page: number = 0): Observable<UserPage> {
+    return this.httpClient.get<UserPage>('/api/1.0/users', {
+      params: { size: '3', page },
     });
   }
 }

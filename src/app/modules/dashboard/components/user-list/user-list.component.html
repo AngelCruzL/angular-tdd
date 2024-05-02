@@ -8,4 +8,20 @@
       {{ user.username }}
     </li>
   </ul>
+
+  <button
+    (click)="loadUsers(page.page-1)"
+    *ngIf="hasPreviousPage"
+    class="previous-page"
+  >
+    &lt; Previous
+  </button>
+
+  <button
+    (click)="loadUsers(page.page+1)"
+    *ngIf="hasNextPage"
+    class="next-page"
+  >
+    Next &gt;
+  </button>
 </div>
