@@ -146,7 +146,7 @@ describe('UserListComponent', () => {
     expect(previousPageButton).toBeTruthy();
   });
 
-  it('should request the previous page after click previous page button', () => {
+  it('should request the previous page after click "previous page" button', () => {
     const request = httpTestingController.expectOne(() => true);
     request.flush(getPage(1, 3));
     fixture.detectChanges();
