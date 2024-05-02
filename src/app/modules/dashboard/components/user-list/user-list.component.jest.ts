@@ -2,10 +2,10 @@ import { setupServer } from 'msw/node';
 import { HttpClientModule } from '@angular/common/http';
 import { rest } from 'msw';
 import { render, screen, waitFor } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { UserListComponent } from './user-list.component';
-import { getPage, PageParam } from './user-list.component.spec';
-import userEvent from '@testing-library/user-event';
+import { getPage, PageParam } from '@shared/utils/data/mock/users.mock';
 
 const server = setupServer(
   rest.get('/api/1.0/users', (req, res, ctx) => {
