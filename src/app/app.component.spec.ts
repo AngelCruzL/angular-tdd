@@ -4,19 +4,25 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
 import { appRoutes } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let router: Router;
+  let httpTestingController: HttpTestingController;
+  let location: Location;
   let appComponent: HTMLElement;
 
   beforeEach(async () => {
@@ -37,6 +43,8 @@ describe('AppComponent', () => {
 
     fixture = TestBed.createComponent(AppComponent);
     router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
+    httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
     appComponent = fixture.nativeElement;
@@ -91,5 +99,28 @@ describe('AppComponent', () => {
         expect(page).toBeTruthy();
       }));
     });
+
+    it('should navigate to user page when clicking the username on user list', fakeAsync(async () => {
+      await router.navigate(['/']);
+      fixture.detectChanges();
+      const request = httpTestingController.expectOne(() => true);
+      request.flush({
+        content: [{ id: 1, username: 'user1', email: 'user1@mail.com' }],
+        page: 0,
+        size: 3,
+        totalPages: 1,
+      });
+      fixture.detectChanges();
+      const linkToUserPage =
+        fixture.nativeElement.querySelector('.list-group-item a');
+      linkToUserPage.click();
+      tick();
+      fixture.detectChanges();
+      const userPage = appComponent.querySelector(
+        'div[data-testId="userDetailPage"]'
+      );
+      expect(userPage).toBeTruthy();
+      expect(location.path()).toEqual('/user/1');
+    }));
   });
 });

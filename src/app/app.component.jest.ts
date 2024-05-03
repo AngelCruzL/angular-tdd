@@ -77,4 +77,13 @@ describe('Navbar Routing', function () {
       expect(page).toBeInTheDocument();
     }
   );
+
+  it('should navigate to user page when clicking the username on user list', async () => {
+    await setup('/');
+
+    const linkToUserPage = await screen.findByText('user1');
+    await userEvent.click(linkToUserPage);
+    const userPage = await screen.findByTestId('userDetailPage');
+    expect(userPage).toBeInTheDocument();
+  });
 });
