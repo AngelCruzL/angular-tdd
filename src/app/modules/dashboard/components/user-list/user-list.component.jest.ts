@@ -90,4 +90,12 @@ describe('UserListComponent', () => {
     const firstUserOnPreviousPage = await screen.findByText('user1');
     expect(firstUserOnPreviousPage).toBeTruthy();
   });
+
+  it('should display a spinner during api call', async () => {
+    await setup();
+
+    expect(screen.getByRole('status')).toBeInTheDocument();
+    await screen.findByText('user1');
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
 });

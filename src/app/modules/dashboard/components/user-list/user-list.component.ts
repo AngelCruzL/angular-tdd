@@ -15,6 +15,7 @@ export class UserListComponent implements OnInit {
     size: 3,
     totalPages: 0,
   };
+  isFetching = false;
 
   #userService = inject(UserService);
 
@@ -32,6 +33,10 @@ export class UserListComponent implements OnInit {
   }
 
   loadUsers(pageNumber: number = 0) {
-    this.#userService.loadUsers(pageNumber).subscribe(res => (this.page = res));
+    this.isFetching = true;
+    this.#userService.loadUsers(pageNumber).subscribe(res => {
+      this.page = res;
+      this.isFetching = false;
+    });
   }
 }

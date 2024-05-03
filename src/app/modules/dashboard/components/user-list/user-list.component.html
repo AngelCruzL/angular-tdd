@@ -9,19 +9,26 @@
     </li>
   </ul>
 
-  <button
-    (click)="loadUsers(page.page-1)"
-    *ngIf="hasPreviousPage"
-    class="previous-page"
-  >
-    &lt; Previous
-  </button>
+  <div class="card-footer text-center">
+    <button
+      (click)="loadUsers(page.page-1)"
+      *ngIf="hasPreviousPage && !isFetching"
+      class="previous-page btn btn-outline-secondary btn-sm float-start"
+    >
+      &lt; Previous
+    </button>
 
-  <button
-    (click)="loadUsers(page.page+1)"
-    *ngIf="hasNextPage"
-    class="next-page"
-  >
-    Next &gt;
-  </button>
+    <button
+      (click)="loadUsers(page.page+1)"
+      *ngIf="hasNextPage && !isFetching"
+      class="next-page btn btn-outline-secondary btn-sm float-end"
+    >
+      Next &gt;
+    </button>
+
+    <span
+      *ngIf='isFetching'
+      class='spinner-border spinner-border-sm'
+      role='status'></span>
+  </div>
 </div>
