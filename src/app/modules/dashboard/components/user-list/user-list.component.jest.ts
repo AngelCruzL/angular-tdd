@@ -4,8 +4,9 @@ import { rest } from 'msw';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { UserListComponent } from './user-list.component';
 import { getPage, PageParam } from '@shared/utils/data/mock/users.mock';
+import { UserListComponent } from './user-list.component';
+import { UserListItemComponent } from '../user-list-item/user-list-item.component';
 
 const server = setupServer(
   rest.get('/api/1.0/users', (req, res, ctx) => {
@@ -25,6 +26,7 @@ afterAll(() => server.close());
 
 const setup = async () => {
   await render(UserListComponent, {
+    declarations: [UserListItemComponent],
     imports: [HttpClientModule],
   });
 };
