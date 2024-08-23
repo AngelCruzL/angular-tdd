@@ -1,3 +1,12 @@
 <div data-testId='userDetailPage'>
-  <h1>User detail</h1>
+  <app-user-card *ngIf="status==='success'" [user]='user'></app-user-card>
+
+  <app-alert *ngIf='status==="fail"' type='danger'>
+    User not found
+  </app-alert>
+
+  <span
+    *ngIf='status==="inProgress"'
+    class='spinner-border spinner-border-sm'
+    role='status'></span>
 </div>
